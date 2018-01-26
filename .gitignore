@@ -5,6 +5,9 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 
+BeefRoast/Temp/
+BeefRoast/Library/
+
 # Visual Studio 2015 cache directory
 /.vs/
 
