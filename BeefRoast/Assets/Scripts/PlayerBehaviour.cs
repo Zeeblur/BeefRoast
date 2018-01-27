@@ -10,7 +10,6 @@ public class PlayerBehaviour : MonoBehaviour
     Vector3 movement;
     public Animator anim;
     Rigidbody rBod;
-
 //	float tempangle = 0;
 
     // Use this for initialization
@@ -18,7 +17,6 @@ public class PlayerBehaviour : MonoBehaviour
     {
 
         rBod = GetComponent<Rigidbody>();
-
 
     }
 
@@ -40,17 +38,25 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Move(float h, float v)
     {
-        movement.Set(h, 0.0f, v);
-        movement = movement.normalized * Speed * Time.deltaTime;
 
-        rBod.MovePosition(transform.position + movement);
+        Vector3 orient = GameObject.FindGameObjectWithTag("MainCamera").transform.forward;
+        Debug.Log("pr " + orient);
 
-		if (h != 0 || v != 0) {
-			float angle = Mathf.Atan2 (h, v) * Mathf.Rad2Deg;;
-			Quaternion rotation = Quaternion.Euler (0, angle, 0);
-			Quaternion newRotation = Quaternion.Slerp(this.transform.rotation, rotation, 0.2f);
-			rBod.MoveRotation (newRotation);
-		}
+        movement = (orient * v) + (GameObject.FindGameObjectWithTag("MainCamera").transform.right * h) ;
+
+        movement = movement.normalized;// * Speed * Time.deltaTime;
+
+        rBod.MovePosition(transform.position + (movement * Speed * Time.deltaTime));
+
+
+        if (h != 0 || v != 0)
+        {
+            Quaternion rotation = Quaternion.identity;
+            rotation.SetLookRotation(movement, Vector3.up);
+            Quaternion newRotation = Quaternion.Slerp(this.transform.rotation, rotation, 0.2f);
+            rBod.MoveRotation(newRotation);
+
+        }
 
     }
 

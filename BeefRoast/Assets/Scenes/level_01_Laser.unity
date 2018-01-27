@@ -290,6 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207812a9ad57c7b468e53c3de4f8d933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camSense: 0.05
 --- !u!1 &361936841
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,6 +661,11 @@ Prefab:
     - target: {fileID: 4783151921748456, guid: 3c5c99ac3f0fab44fbc31a1c8f2b3e2a, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 54143484999434700, guid: 3c5c99ac3f0fab44fbc31a1c8f2b3e2a,
+        type: 2}
+      propertyPath: m_Constraints
+      value: 80
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3c5c99ac3f0fab44fbc31a1c8f2b3e2a, type: 2}
