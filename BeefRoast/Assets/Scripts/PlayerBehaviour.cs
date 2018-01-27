@@ -11,12 +11,17 @@ public class PlayerBehaviour : MonoBehaviour
     public Animator anim;
     Rigidbody rBod;
 
-	bool canPush = false;
 	bool push = false;
+	bool canRotate = false;
+    bool canPush = false;
+    bool pushable = false;
+    bool rotatable = false;
+    bool changeDirecUp = true;
+    bool changeDirecAcross = true;
 
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
 
         rBod = GetComponent<Rigidbody>();
@@ -41,22 +46,68 @@ public class PlayerBehaviour : MonoBehaviour
         // get input from axes
         // Raw input has fixed values -1, 0 or 1
 
-		if (canPush && Input.GetKey ("space")) {
+        // Checking for push
+        if (canPush && Input.GetKey("space"))
+        {
 
-			push = true;
+            pushable = true;
 
-			Debug.Log ("push");
+            Debug.Log("push");
+            
+            // Getting vector direction
+            Vector3 forward = transform.forward;
+            forward.y = 0;
 
-		} else {
-			push = false;
-		}
+            float headingAngle = Quaternion.LookRotation(forward).eulerAngles.y;
+
+            // Checking if facing north/south or east/west
+            if ((headingAngle > 45f && headingAngle < 315f) || (headingAngle > 135f &&  headingAngle < 225f ))
+            {
+                Debug.Log("North/South");
+                changeDirecAcross = false;
+            }
+            else
+            {
+                Debug.Log("East/West");
+                changeDirecUp = false;
+            }
+
+            var push = new Push();
+            push.MoveBlock(movement);
+            
+        } // Checking for rotate
+        else if (canRotate && Input.GetKey("space"))
+        {
+            rotatable = true;
+
+            Debug.Log("Rotate");
+
+        }
+        else
+        {
+            rotatable = false;
+            pushable = false;
+            changeDirecUp = true;
+            changeDirecAcross = true;
+        }
 
         float horz = Input.GetAxisRaw("Horizontal");
         float vert = Input.GetAxisRaw("Vertical");
 
-        Move(horz, vert);
-
-		animating (horz, vert);
+        // Stopping char from moving sideways with block
+        if (changeDirecUp == false)
+        {
+            Move(horz, 0);
+        }else if (changeDirecAcross == false)
+        {
+            Move(0, vert);
+        }
+        else
+        {
+            Move(horz, vert);
+        }
+        
+        animating(horz, vert);
 
     }
 
@@ -84,43 +135,53 @@ public class PlayerBehaviour : MonoBehaviour
         }
 
         rBod.rotation = new Quaternion(0, rBod.rotation.y, 0, rBod.rotation.w);
+    }
+
+    void animating(float h, float v)
+    {
+        bool walking = (h != 0f || v != 0f) && !pushable;
+
+        anim.SetBool("walking", walking);
+
+        anim.SetBool("pushing", pushable);
+
+        Debug.Log(pushable);
 
     }
 
-	void animating(float h, float v){
-		bool walking = (h != 0f || v != 0f) && !push;
-	
-		anim.SetBool ("walking", walking);
+    void OnCollisionEnter(Collision col)
+    {
+        Debug.Log("Collision Happened");
 
+        if (col.gameObject.tag == "Pushable")
+        {
+            canPush = true;
+            Debug.Log("Can push true");
+        }
 
+        if (col.gameObject.tag == "Rotatable")
+        {
+            canRotate = true;
+            Debug.Log("Can rotate true");
+        }
+    }
 
-		anim.SetBool ("pushing", push);
+    void OnCollisionExit(Collision col)
+    {
+        Debug.Log("Collision stopped");
 
+        if (col.gameObject.tag == "Pushable")
+        {
+            canPush = false;
+            Debug.Log("Can push false");
+        }
 
-
-//		Debug.Log (push);
-
-	}
-		
-
-	void OnCollisionEnter (Collision col)
-	{
-
-		if(col.gameObject.tag == "Pushable")
-		{
-			canPush = true;
-		}
-
-	}
-
-	void OnCollisionExit (Collision col)
-	{
-		if (col.gameObject.tag == "Pushable")
-		{
-			canPush = false;
-		}
-
-	}
+        if (col.gameObject.tag == "Rotatable")
+        {
+            canRotate = false;
+            Debug.Log("Can rotate false");
+        }
+    }
 
 	public void playFootSteps(string path){
 
@@ -129,5 +190,8 @@ public class PlayerBehaviour : MonoBehaviour
 		FMODUnity.RuntimeManager.PlayOneShot (path, GetComponent<Transform> ().position);
 	}
 
+    // Joining push block and character
+    // Joining rotate block and charcter
+    // Rotating around the centre of a block
 
 }
