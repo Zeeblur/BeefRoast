@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{c97e49cc-50d1-4ac6-9b55-af482b47c1d9}">
+        <property name="assetPath">
+            <value>stone enter light_7.L.aif</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>2.0041950113378686</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{c409303a-f008-42f3-a356-8ab3bc374d86}</destination>
+        </relationship>
+    </object>
+</objects>

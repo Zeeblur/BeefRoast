@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Pushable
   - LightEmit
-  - Rotatable
+  - Pushable
+  - Side
   layers:
   - Default
   - TransparentFX
