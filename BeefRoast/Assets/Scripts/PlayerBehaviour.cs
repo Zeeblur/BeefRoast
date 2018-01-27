@@ -11,7 +11,8 @@ public class PlayerBehaviour : MonoBehaviour
     public Animator anim;
     Rigidbody rBod;
 
-//	float tempangle = 0;
+	bool canPush = false;
+	bool push = false;
 
     // Use this for initialization
     void Start ()
@@ -22,12 +23,25 @@ public class PlayerBehaviour : MonoBehaviour
 
     }
 
+
     void FixedUpdate()
     {
         // fires every physics update
 
         // get input from axes
         // Raw input has fixed values -1, 0 or 1
+
+		
+		if (canPush && Input.GetKey ("space")) {
+
+			push = true;
+
+			Debug.Log ("push");
+
+		} else {
+			push = false;
+		}
+
         float horz = Input.GetAxisRaw("Horizontal");
         float vert = Input.GetAxisRaw("Vertical");
 
@@ -46,19 +60,46 @@ public class PlayerBehaviour : MonoBehaviour
         rBod.MovePosition(transform.position + movement);
 
 		if (h != 0 || v != 0) {
-			float angle = Mathf.Atan2 (h, v) * Mathf.Rad2Deg;;
+			float angle = Mathf.Atan2 (h, v) * Mathf.Rad2Deg;
 			Quaternion rotation = Quaternion.Euler (0, angle, 0);
-			Quaternion newRotation = Quaternion.Slerp(this.transform.rotation, rotation, 0.2f);
+			Quaternion newRotation = Quaternion.Slerp (this.transform.rotation, rotation, 0.2f);
 			rBod.MoveRotation (newRotation);
 		}
 
     }
 
 	void animating(float h, float v){
-		bool walking = h != 0f || v != 0f;
-			
+		bool walking = (h != 0f || v != 0f) && !push;
+	
 		anim.SetBool ("walking", walking);
 
+
+
+		anim.SetBool ("pushing", push);
+
+		Debug.Log (push);
+
 	}
+		
+
+	void OnCollisionEnter (Collision col)
+	{
+
+		if(col.gameObject.tag == "Pushable")
+		{
+			canPush = true;
+		}
+
+	}
+
+	void OnCollisionExit (Collision col)
+	{
+		if (col.gameObject.tag == "Pushable")
+		{
+			canPush = false;
+		}
+
+	}
+
 
 }
