@@ -5,18 +5,21 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
 
-
     public float Speed = 6.0f;
 
     Vector3 movement;
-    Animator anim;
+    public Animator anim;
     Rigidbody rBod;
+
+//	float tempangle = 0;
 
     // Use this for initialization
     void Start ()
     {
-        anim = GetComponent<Animator>();
+
         rBod = GetComponent<Rigidbody>();
+
+
     }
 
     void FixedUpdate()
@@ -28,8 +31,10 @@ public class PlayerBehaviour : MonoBehaviour
         float horz = Input.GetAxisRaw("Horizontal");
         float vert = Input.GetAxisRaw("Vertical");
 
-
         Move(horz, vert);
+
+		animating (horz, vert);
+
     }
 
 
@@ -40,6 +45,20 @@ public class PlayerBehaviour : MonoBehaviour
 
         rBod.MovePosition(transform.position + movement);
 
+		if (h != 0 || v != 0) {
+			float angle = Mathf.Atan2 (h, v) * Mathf.Rad2Deg;;
+			Quaternion rotation = Quaternion.Euler (0, angle, 0);
+			Quaternion newRotation = Quaternion.Slerp(this.transform.rotation, rotation, 0.2f);
+			rBod.MoveRotation (newRotation);
+		}
+
     }
+
+	void animating(float h, float v){
+		bool walking = h != 0f || v != 0f;
+			
+		anim.SetBool ("walking", walking);
+
+	}
 
 }
