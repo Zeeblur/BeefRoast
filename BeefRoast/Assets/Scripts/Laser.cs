@@ -1,19 +1,39 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+
+public enum colours
+{
+    white, red, green, blue, yellow, orange, purple
+}
+
+
 
 public class Laser : MonoBehaviour
 {
+
     private GameObject laser, holder;
     private Vector3 laserScale;
 
     public float thickness;
     public float length;
-    public Color color;
+    public colours color;
 
-    public Material beamCol;
-    public GameObject pointLight;
+    public GameObject pointLight, emitLight;
     MeshRenderer[] meshes;
+
+    public Material[] colouredMat;
+
+    private Color[] shade =
+    {
+        Color.white,
+        Color.red,
+        Color.green,
+        Color.blue,
+        Color.yellow,
+        new Color(1.0f, 0.5f, 0.0f),
+        new Color(0.5f, 0.0f, 1.0f)
+    };
 
     // Use this for initialization
     void Start ()
@@ -21,7 +41,7 @@ public class Laser : MonoBehaviour
         laserScale = new Vector3(thickness, thickness, length);
 
         // holder is light emit
-        holder = GameObject.FindGameObjectWithTag("LightEmit");
+        holder = gameObject;
 
         // create pointer
         laser = transform.GetChild(0).gameObject;
@@ -38,14 +58,15 @@ public class Laser : MonoBehaviour
         // change colour 
         foreach (MeshRenderer m in meshes)
         {
-            beamCol.SetColor("_Color", color);
-            beamCol.SetColor("_EmissionColor", color);
-            m.material = beamCol;
+            Debug.Log((int)color);
+            m.material = colouredMat[(int)color];
         }
 
+        Enum.GetName(typeof(colours), color);
+
         // change light col
-        pointLight.GetComponent<Light>().color = color;
-        
+        pointLight.GetComponent<Light>().color = shade[(int)color];
+        emitLight.GetComponent<Light>().color = shade[(int)color];
     }
 	
 	// Update is called once per frame
@@ -67,8 +88,6 @@ public class Laser : MonoBehaviour
             length = hit.distance;
             Debug.Log("Leng" + length);
         }
-
-
 
     }
 }
