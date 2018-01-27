@@ -44,7 +44,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         movement = (orient * v) + (GameObject.FindGameObjectWithTag("MainCamera").transform.right * h) ;
 
-        movement = movement.normalized;// * Speed * Time.deltaTime;
+        movement = movement.normalized;
 
         rBod.MovePosition(transform.position + (movement * Speed * Time.deltaTime));
 
@@ -57,6 +57,8 @@ public class PlayerBehaviour : MonoBehaviour
             rBod.MoveRotation(newRotation);
 
         }
+
+        rBod.rotation = new Quaternion(0, rBod.rotation.y, 0, rBod.rotation.w);
 
     }
 
