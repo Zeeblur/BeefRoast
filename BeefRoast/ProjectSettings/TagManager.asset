@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pushable
+  - LightEmit
+  - Rotatable
   layers:
   - Default
   - TransparentFX

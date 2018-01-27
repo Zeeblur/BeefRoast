@@ -11,10 +11,12 @@ public class PlayerBehaviour : MonoBehaviour
     public Animator anim;
     Rigidbody rBod;
 
+    bool canRotate = false;
     bool canPush = false;
     bool pushable = false;
+    bool rotatable = false;
     bool changeDirecUp = true;
-    bool changeDirecDown = false;
+    bool changeDirecAcross = true;
 
     // player transform
 
@@ -35,7 +37,7 @@ public class PlayerBehaviour : MonoBehaviour
         // get input from axes
         // Raw input has fixed values -1, 0 or 1
 
-
+        // Checking for push
         if (canPush && Input.GetKey("space"))
         {
 
@@ -49,31 +51,53 @@ public class PlayerBehaviour : MonoBehaviour
 
             float headingAngle = Quaternion.LookRotation(forward).eulerAngles.y;
 
-            // Checking if he's facing north/south or east/west
+            // Checking if facing north/south or east/west
             if ((headingAngle > 45f && headingAngle < 315f) || (headingAngle > 135f &&  headingAngle < 225f ))
             {
                 Debug.Log("North/South");
+                changeDirecAcross = false;
             }
             else
             {
                 Debug.Log("East/West");
+                changeDirecUp = false;
             }
 
             var push = new Push();
             push.MoveBlock(movement);
-
             
+        } // Checking for rotate
+        else if (canRotate && Input.GetKey("space"))
+        {
+            rotatable = true;
+
+            Debug.Log("Rotate");
+
         }
         else
         {
+            rotatable = false;
             pushable = false;
+            changeDirecUp = true;
+            changeDirecAcross = true;
         }
 
         float horz = Input.GetAxisRaw("Horizontal");
         float vert = Input.GetAxisRaw("Vertical");
 
-        Move(horz, vert);
-
+        // Stopping char from moving sideways with block
+        if (changeDirecUp == false)
+        {
+            Move(horz, 0);
+        }else if (changeDirecAcross == false)
+        {
+            Move(0, vert);
+        }
+        else
+        {
+            Move(horz, vert);
+        }
+        
         animating(horz, vert);
 
     }
@@ -127,6 +151,11 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("Can push true");
         }
 
+        if (col.gameObject.tag == "Rotatable")
+        {
+            canRotate = true;
+            Debug.Log("Can rotate true");
+        }
     }
 
     void OnCollisionExit(Collision col)
@@ -139,7 +168,15 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("Can push false");
         }
 
+        if (col.gameObject.tag == "Rotatable")
+        {
+            canRotate = false;
+            Debug.Log("Can rotate false");
+        }
     }
 
+    // Joining push block and character
+    // Joining rotate block and charcter
+    // Rotating around the centre of a block
 
 }
