@@ -56,7 +56,7 @@ public class Laser : MonoBehaviour
         laser.transform.localScale = laserScale;
         laser.transform.localPosition = new Vector3(0f, 0f, (length * 10 / 2) + (transform.localScale.x /2));
 
-        pointLight.transform.localPosition = new Vector3(0f, 0f, (length * 10)-2);
+        pointLight.transform.localPosition = new Vector3(0f, 0f, (length * 10)-1);
 
         Ray raycast = new Ray(transform.position, transform.forward);
         RaycastHit hit;
