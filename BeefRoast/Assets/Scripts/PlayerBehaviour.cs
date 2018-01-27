@@ -19,6 +19,19 @@ public class PlayerBehaviour : MonoBehaviour
     bool changeDirecUp = true;
     bool changeDirecAcross = true;
 
+	public List<GameObject> pushables = new List<GameObject>();
+
+
+	bool canPoosh = false;
+	public List<GameObject> pooshables = new List<GameObject>();
+	GameObject closestPooshable;
+
+
+	bool pooshing = false;
+
+
+
+	GameObject closestPushable;
 
     // Use this for initialization
     void Start()
@@ -26,18 +39,70 @@ public class PlayerBehaviour : MonoBehaviour
 
         rBod = GetComponent<Rigidbody>();
 
+		// add all pushable objects to pushables list
+		foreach(GameObject g in GameObject.FindGameObjectsWithTag("Pushable")) {
+			pushables.Add (g);
+		}
+
     }
 
 
 	void Update(){
 
-		if (Input.GetKeyDown ("p")) {
+//		closestPushable = pushables [0];
+//		// set shortest distance to the distance between the player and the first pushable
+//		float shortestDistance = Vector3.Distance (this.transform.position, pushables[0].transform.position);
+//		//check for the shortest distance
+//		foreach (GameObject g in pushables) {
+//
+//			if (Vector3.Distance(g.transform.position, this.transform.position) 
+//				< Vector3.Distance(closestPushable.transform.position, this.transform.position)){
+//				closestPushable = g;
+//				}
+//		}
+//		Debug.Log ("the closest block is " + Vector3.Distance(closestPushable.transform.position, this.transform.position) + " away");
 
-			GetComponent<FMODUnity.StudioEventEmitter>().Play();
-			Debug.Log ("play");
+		if (Input.GetKeyDown("t") && pooshables.Count!=0 && !pooshing) {
 
+			if (pooshables.Count == 1) {
+				// lock to pooshable 1
+				LockToPush (pooshables[0].transform);
+
+			} else {
+				// find the closest pushable parent block
+
+				closestPooshable = pooshables [0];
+				foreach (var p in pooshables) {
+					if (Vector3.Distance (this.transform.position, p.transform.position)
+						< Vector3.Distance (this.transform.position, closestPooshable.transform.position)) {
+						closestPooshable = p;
+					}
+				}
+				// lock to closest pushable
+				LockToPush (closestPooshable.transform);
+
+			}
+
+			pooshing = true;
+
+
+		} else if (Input.GetKeyDown ("t") && pooshing) {
+			// release push
+			ReleasePush();
+			pooshing = false;
+			
 		}
 	}
+
+	void ReleasePush(){
+
+		// change the block parent to the main heirarchy
+		gameObject.transform.GetChild(gameObject.transform.childCount-1).transform.parent = null;
+		changeDirecAcross = true;
+		changeDirecUp = true;
+	}
+
+
 
     void FixedUpdate()
     {
@@ -98,7 +163,8 @@ public class PlayerBehaviour : MonoBehaviour
         if (changeDirecUp == false)
         {
             Move(horz, 0);
-        }else if (changeDirecAcross == false)
+        }
+		else if (changeDirecAcross == false)
         {
             Move(0, vert);
         }
@@ -112,18 +178,42 @@ public class PlayerBehaviour : MonoBehaviour
     }
 
 
+
+
+	void LockToPush(Transform sideToLockOnTo){
+
+//		Debug.Log (sideToLockOnTo.gameObject.name);
+
+		Vector3 temp = transform.position;
+		temp.z = sideToLockOnTo.transform.position.z;
+		temp.x = sideToLockOnTo.transform.position.x;
+
+		transform.position = temp;
+		transform.rotation = sideToLockOnTo.transform.rotation;
+
+
+		changeDirecAcross = false;
+		changeDirecUp = false;
+
+		// change brick parent to player
+		sideToLockOnTo.parent.transform.parent = this.gameObject.transform;
+
+
+	}
+
+
     void Move(float h, float v)
     {
 
+
         Vector3 orient = GameObject.FindGameObjectWithTag("MainCamera").transform.forward;
-        Debug.Log("pr " + orient);
+//        Debug.Log("pr " + orient);
 
         movement = (orient * v) + (GameObject.FindGameObjectWithTag("MainCamera").transform.right * h) ;
 
         movement = movement.normalized;
 
         rBod.MovePosition(transform.position + (movement * Speed * Time.deltaTime));
-
 
         if (h != 0 || v != 0)
         {
@@ -145,7 +235,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         anim.SetBool("pushing", pushable);
 
-        Debug.Log(pushable);
+//        Debug.Log(pushable);
 
     }
 
@@ -156,15 +246,46 @@ public class PlayerBehaviour : MonoBehaviour
         if (col.gameObject.tag == "Pushable")
         {
             canPush = true;
-            Debug.Log("Can push true");
+//            Debug.Log("Can push true");
         }
 
         if (col.gameObject.tag == "Rotatable")
         {
             canRotate = true;
-            Debug.Log("Can rotate true");
+//            Debug.Log("Can rotate true");
         }
+
     }
+
+
+	void OnTriggerEnter(Collider col){
+
+//		if (col.GetType () != typeof(MeshCollider)) {
+//			return;
+//		}
+
+		Debug.Log ("BAWS");
+		if (col.gameObject.tag == "Side")
+		{
+			canPoosh = true;
+
+			pooshables.Add (col.gameObject);
+		}
+	}
+
+	void OnTriggerExit(Collider col){
+
+		if (col.gameObject.tag == "Side")
+		{
+			Debug.Log ("BOOS");
+			canPoosh = true;
+
+			pooshables.Remove(col.gameObject);
+
+		}
+	}
+
+
 
     void OnCollisionExit(Collision col)
     {
