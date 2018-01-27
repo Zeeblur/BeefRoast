@@ -24,6 +24,16 @@ public class PlayerBehaviour : MonoBehaviour
     }
 
 
+	void Update(){
+
+		if (Input.GetKeyDown ("p")) {
+
+			GetComponent<FMODUnity.StudioEventEmitter>().Play();
+			Debug.Log ("play");
+
+		}
+	}
+
     void FixedUpdate()
     {
         // fires every physics update
@@ -31,7 +41,6 @@ public class PlayerBehaviour : MonoBehaviour
         // get input from axes
         // Raw input has fixed values -1, 0 or 1
 
-		
 		if (canPush && Input.GetKey ("space")) {
 
 			push = true;
@@ -77,7 +86,9 @@ public class PlayerBehaviour : MonoBehaviour
 
 		anim.SetBool ("pushing", push);
 
-		Debug.Log (push);
+
+
+//		Debug.Log (push);
 
 	}
 		
@@ -99,6 +110,13 @@ public class PlayerBehaviour : MonoBehaviour
 			canPush = false;
 		}
 
+	}
+
+	public void playFootSteps(string path){
+
+		GetComponent<FMODUnity.StudioEventEmitter>().Play();
+
+		FMODUnity.RuntimeManager.PlayOneShot (path, GetComponent<Transform> ().position);
 	}
 
 
