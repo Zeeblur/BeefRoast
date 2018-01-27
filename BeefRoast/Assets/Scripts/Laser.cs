@@ -12,6 +12,7 @@ public class Laser : MonoBehaviour
     public Color color;
 
     public Material beamCol;
+    public GameObject pointLight;
     MeshRenderer[] meshes;
 
     // Use this for initialization
@@ -41,6 +42,9 @@ public class Laser : MonoBehaviour
             beamCol.SetColor("_EmissionColor", color);
             m.material = beamCol;
         }
+
+        // change light col
+        pointLight.GetComponent<Light>().color = color;
         
     }
 	
@@ -48,9 +52,11 @@ public class Laser : MonoBehaviour
 	void Update ()
     {
         // change size per raycast
-        laserScale = new Vector3(thickness, thickness, length);
+        laserScale = new Vector3(thickness, thickness, 10 * length);
         laser.transform.localScale = laserScale;
-        laser.transform.localPosition = new Vector3(0f, 0f, (length / 2) + (transform.localScale.x /2));
+        laser.transform.localPosition = new Vector3(0f, 0f, (length * 10 / 2) + (transform.localScale.x /2));
+
+        pointLight.transform.localPosition = new Vector3(0f, 0f, (length * 10)-2);
 
         Ray raycast = new Ray(transform.position, transform.forward);
         RaycastHit hit;
@@ -59,6 +65,7 @@ public class Laser : MonoBehaviour
         if (bHit)
         {
             length = hit.distance;
+            Debug.Log("Leng" + length);
         }
 
 
