@@ -107,7 +107,6 @@ public class PlayerBehaviour : MonoBehaviour
     {
 
         Vector3 orient = GameObject.FindGameObjectWithTag("MainCamera").transform.forward;
-        Debug.Log("pr " + orient);
 
         movement = (orient * v) + (GameObject.FindGameObjectWithTag("MainCamera").transform.right * h) ;
 
@@ -136,7 +135,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         anim.SetBool("pushing", pushable);
 
-        Debug.Log(pushable);
+       // Debug.Log(pushable);
 
     }
 

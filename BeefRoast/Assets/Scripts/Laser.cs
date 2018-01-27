@@ -12,6 +12,8 @@ public enum colours
 public class Laser : MonoBehaviour
 {
 
+    public GameObject emitPrefab;
+
     private GameObject laser, holder;
     private Vector3 laserScale;
 
@@ -58,7 +60,6 @@ public class Laser : MonoBehaviour
         // change colour 
         foreach (MeshRenderer m in meshes)
         {
-            Debug.Log((int)color);
             m.material = colouredMat[(int)color];
         }
 
@@ -86,7 +87,37 @@ public class Laser : MonoBehaviour
         if (bHit)
         {
             length = hit.distance;
-            Debug.Log("Leng" + length);
+
+            Transform target = hit.transform;
+
+            // if hit a filter, check if filter has an emitter already.
+            if (target.gameObject.tag == "Filter")
+            {
+                
+                Transform spawner = hit.transform.GetChild(0);
+
+                Debug.Log("name: " + spawner.name);
+
+                if (spawner.childCount < 1)
+                {
+                    Debug.Log("here");
+                    // spawn an emitter
+                    int chosenColour = -1;
+                    // get colour from spawner
+                    for(int i =0; i < shade.Length; i++)
+                    {
+                        if (target.GetComponent<MeshRenderer>().material.color == shade[i])
+                        {
+                            chosenColour = i;
+                            return;
+                        }
+                    }
+
+                    GameObject colouredBeam = Instantiate(emitPrefab) as GameObject;
+                    colouredBeam.GetComponent<Laser>().color = (colours)chosenColour;
+                    colouredBeam.transform.SetParent(spawner, false);
+                }
+            }
         }
 
     }
