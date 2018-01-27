@@ -14,12 +14,12 @@ public class PlayerBehaviour : MonoBehaviour
 	bool canPush = false;
 	bool push = false;
 
+
     // Use this for initialization
     void Start ()
     {
 
         rBod = GetComponent<Rigidbody>();
-
 
     }
 
@@ -63,17 +63,27 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Move(float h, float v)
     {
-        movement.Set(h, 0.0f, v);
-        movement = movement.normalized * Speed * Time.deltaTime;
 
-        rBod.MovePosition(transform.position + movement);
+        Vector3 orient = GameObject.FindGameObjectWithTag("MainCamera").transform.forward;
+        Debug.Log("pr " + orient);
 
-		if (h != 0 || v != 0) {
-			float angle = Mathf.Atan2 (h, v) * Mathf.Rad2Deg;
-			Quaternion rotation = Quaternion.Euler (0, angle, 0);
-			Quaternion newRotation = Quaternion.Slerp (this.transform.rotation, rotation, 0.2f);
-			rBod.MoveRotation (newRotation);
-		}
+        movement = (orient * v) + (GameObject.FindGameObjectWithTag("MainCamera").transform.right * h) ;
+
+        movement = movement.normalized;
+
+        rBod.MovePosition(transform.position + (movement * Speed * Time.deltaTime));
+
+
+        if (h != 0 || v != 0)
+        {
+            Quaternion rotation = Quaternion.identity;
+            rotation.SetLookRotation(movement, Vector3.up);
+            Quaternion newRotation = Quaternion.Slerp(this.transform.rotation, rotation, 0.2f);
+            rBod.MoveRotation(newRotation);
+
+        }
+
+        rBod.rotation = new Quaternion(0, rBod.rotation.y, 0, rBod.rotation.w);
 
     }
 

@@ -96,7 +96,12 @@ ModelImporter:
     7400000: mixamo.com
     9500000: //RootNode
     13700000: Guard03_Mesh
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Guard_03
+    second: {fileID: 2100000, guid: 7792e2197fdf0a748a303dadc276dcec, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
