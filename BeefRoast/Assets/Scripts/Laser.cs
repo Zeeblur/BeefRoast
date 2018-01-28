@@ -1,27 +1,52 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System;
 using UnityEngine;
+
+public enum colours
+{
+    white, red, green, blue, yellow, orange, purple
+}
+
+
 
 public class Laser : MonoBehaviour
 {
+
+    public GameObject emitPrefab;
+
     private GameObject laser, holder;
     private Vector3 laserScale;
 
     public float thickness;
     public float length;
-    public Color color;
+    public colours color;
 
-    public Material beamCol;
-    public GameObject pointLight;
+    public GameObject pointLight, emitLight;
     MeshRenderer[] meshes;
+
+    public Material[] colouredMat;
+
+    List<GameObject> objSpawned = new List<GameObject>();
+
+    private Color[] shade =
+    {
+        Color.white,
+        Color.red,
+        Color.green,
+        Color.blue,
+        Color.yellow,
+        new Color(1.0f, 0.5f, 0.0f),
+        new Color(0.5f, 0.0f, 1.0f)
+    };
 
     // Use this for initialization
     void Start ()
     {
+
         laserScale = new Vector3(thickness, thickness, length);
 
         // holder is light emit
-        holder = GameObject.FindGameObjectWithTag("LightEmit");
+        holder = gameObject;
 
         // create pointer
         laser = transform.GetChild(0).gameObject;
@@ -35,22 +60,31 @@ public class Laser : MonoBehaviour
         //beamCol.SetColor("_Color", color);
         meshes = laser.GetComponentsInChildren<MeshRenderer>();
 
+        ChangeColour(color);
+
+    }
+	
+    void ChangeColour(colours c)
+    {
         // change colour 
         foreach (MeshRenderer m in meshes)
         {
-            beamCol.SetColor("_Color", color);
-            beamCol.SetColor("_EmissionColor", color);
-            m.material = beamCol;
+            m.material = colouredMat[(int)c];
         }
 
+        Enum.GetName(typeof(colours), c);
+
         // change light col
-        pointLight.GetComponent<Light>().color = color;
-        
+        pointLight.GetComponent<Light>().color = shade[(int)c];
+        emitLight.GetComponent<Light>().color = shade[(int)c];
     }
-	
+
 	// Update is called once per frame
 	void Update ()
     {
+        ChangeColour(color);
+
+
         // change size per raycast
         laserScale = new Vector3(thickness, thickness, 10 * length);
         laser.transform.localScale = laserScale;
@@ -65,10 +99,62 @@ public class Laser : MonoBehaviour
         if (bHit)
         {
             length = hit.distance;
-            Debug.Log("Leng" + length);
+
+            if (transform.parent != null)
+            {
+                length *= 0.5f;
+            }
+
+            Transform target = hit.transform;
+
+            // if hit a filter, check if filter has an emitter already.
+            if (target.gameObject.tag == "Filter")
+            {
+                
+                Transform spawner = hit.transform.GetChild(0);
+
+                if (spawner.childCount < 1)
+                {
+                    Debug.Log("here");
+                    // spawn an emitter
+                    int chosenColour = -1;
+                    // get colour from spawner
+                    for(int i =0; i < shade.Length; i++)
+                    {
+                        if (target.GetComponent<MeshRenderer>().material.color.r == shade[i].r &&
+                            target.GetComponent<MeshRenderer>().material.color.g == shade[i].g &&
+                            target.GetComponent<MeshRenderer>().material.color.b == shade[i].b)
+                        {
+                            Debug.Log("UASS");
+                            chosenColour = i;
+                            break;
+                        }
+                    }
+
+                    GameObject colouredBeam = Instantiate(emitPrefab) as GameObject;
+                    colouredBeam.GetComponent<Laser>().color = (colours)chosenColour;
+                    colouredBeam.GetComponent<Laser>().emitPrefab = emitPrefab;
+                    // false = worldposition doesn't stay
+                    colouredBeam.transform.SetParent(spawner, false);
+
+                    objSpawned.Add(colouredBeam);
+                }
+
+                spawner.position = pointLight.transform.position;
+
+                spawner.localPosition = new Vector3(spawner.localPosition.x,
+                    spawner.localPosition.y,
+                    -spawner.localPosition.z - 0.1f);
+            }
+            else
+            {
+                foreach(GameObject obj in objSpawned)
+                {
+                    DestroyImmediate(obj);
+                }
+                objSpawned.Clear();
+            }
         }
-
-
 
     }
 }

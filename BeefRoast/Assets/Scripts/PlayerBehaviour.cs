@@ -252,7 +252,7 @@ public class PlayerBehaviour : MonoBehaviour
     void Move(float h, float v)
     { 
         Vector3 orient = GameObject.FindGameObjectWithTag("MainCamera").transform.forward;
-//        Debug.Log("pr " + orient);
+
 
         movement = (orient * v) + (GameObject.FindGameObjectWithTag("MainCamera").transform.right * h) ;
 
@@ -324,9 +324,6 @@ public class PlayerBehaviour : MonoBehaviour
         anim.SetBool("walking", walking);
 
         anim.SetBool("pushing", pushable);
-
-//        anim.SetBool("Pulling"); -- Need a pulling animation set
-//        Debug.Log(pushable);
 
     }
 
@@ -409,16 +406,5 @@ public class PlayerBehaviour : MonoBehaviour
 		FMODUnity.RuntimeManager.PlayOneShot (path, GetComponent<Transform> ().position);
 	}
 
-    // Joining push block and character
-    // Joining rotate block and charcter
-    // Rotating around the centre of a block
 
-    // Throwing random angles
-    // Turning 180 with block
-    // Block changing direction when walk into a wall
-
-    // Release push
-    // Lock to push
-
-    //             rBod.constraints = RigidbodyConstraints.FreezeAll; for rotation before blocks are joined
 }

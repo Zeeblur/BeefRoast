@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - LightEmit
+  - Rotatable
+  - Filter
   - Pushable
   - Side
   - Rotatable
