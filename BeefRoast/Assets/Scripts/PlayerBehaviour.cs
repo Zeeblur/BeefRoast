@@ -332,7 +332,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         anim.SetBool("walking", walking);
 
-        anim.SetBool("pushing", pushable);
+        anim.SetBool("pushing", pooshing);
 
     }
 
