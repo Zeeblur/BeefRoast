@@ -17,20 +17,30 @@
         {
             if (Input.GetKey(KeyCode.Return))
             {
-                SceneManager.LoadScene("level_01");
+                SceneManager.LoadScene("level_01_Laser");
             }
             if (Input.GetKey(KeyCode.Space))
             {
-                SceneManager.LoadScene("level_01");
+                SceneManager.LoadScene("level_01_Laser");
             }
             if (Input.GetKey(KeyCode.E))
             {
-                SceneManager.LoadScene("level_01");
+                SceneManager.LoadScene("level_01_Laser");
             }
 
             if (Input.GetKey(KeyCode.W))
             {
-                SceneManager.LoadScene("level_01");
+                SceneManager.LoadScene("level_01_Laser");
             }
+
+            if (Input.GetKey(KeyCode.E))
+            {
+                SceneManager.LoadScene("level_01_Laser");
+        }
+
+            if (Input.GetKey(KeyCode.Q))
+            {
+                SceneManager.LoadScene("level_01_Laser");
+        }
     }
         }
