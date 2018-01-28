@@ -9,11 +9,11 @@ TagManager:
   - Filter
   - Pushable
   - Side
-  - Rotatable
   - RotatableSide
   - Mirror
   - mPane
   - clothes
+  - StoneImpact
   layers:
   - Default
   - TransparentFX

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{1616a2bf-f2b6-4629-903a-2bafb3a7c26e}">
+        <property name="assetPath">
+            <value>stone impact 1.L.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>1</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{c409303a-f008-42f3-a356-8ab3bc374d86}</destination>
+        </relationship>
+    </object>
+</objects>

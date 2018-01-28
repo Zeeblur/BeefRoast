@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{1dbb588a-da35-435b-855b-e9247c3c6a39}">
+        <property name="assetPath">
+            <value>fw_wind_caves_01.aif</value>
+        </property>
+        <property name="isStreaming">
+            <value>true</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>30</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{c409303a-f008-42f3-a356-8ab3bc374d86}</destination>
+        </relationship>
+    </object>
+</objects>
