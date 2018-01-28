@@ -11,6 +11,9 @@ TagManager:
   - Side
   - Rotatable
   - RotatableSide
+  - Mirror
+  - mPane
+  - clothes
   layers:
   - Default
   - TransparentFX

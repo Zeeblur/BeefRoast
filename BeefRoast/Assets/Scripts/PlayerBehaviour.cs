@@ -32,8 +32,10 @@ public class PlayerBehaviour : MonoBehaviour
     private bool canRotate;
     public List<GameObject> rotatables = new List<GameObject>();
     GameObject closestRotatable;
-    bool rotating;
-    
+    public bool rotating;
+
+    public Material clothes;
+    public Material invise;
 
     // Use this for initialization
     void Start()
@@ -43,7 +45,14 @@ public class PlayerBehaviour : MonoBehaviour
 
     }
 
-	void Update(){
+    public void changeColour(Color c)
+    {
+        // clothes
+        invise.color = c;
+        GameObject.FindGameObjectWithTag("clothes").GetComponent<MeshRenderer>().material = invise;
+    }
+
+    void Update(){
 
 		if (Input.GetKeyDown("t") && pooshables.Count!=0 && !pooshing) {
 
