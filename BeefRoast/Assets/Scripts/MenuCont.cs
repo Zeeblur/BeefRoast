@@ -12,34 +12,9 @@ public class MenuCont : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if (Input.GetKey(KeyCode.Return))
+	    if (Input.GetKey(KeyCode.Joystick1Button0))
 	    {
 	        SceneManager.LoadScene("Intoduction");
 	    }
-
-	    if (Input.GetKey(KeyCode.Space))
-	    {
-	        SceneManager.LoadScene("Intoduction");
-	    }
-
-	    if (Input.GetKey(KeyCode.E))
-	    {
-	        SceneManager.LoadScene("Intoduction");
-	    }
-
-	    if (Input.GetKey(KeyCode.W))
-	    {
-	        SceneManager.LoadScene("Intoduction");
-	    }
-
-	    if (Input.GetKey(KeyCode.E))
-	    {
-	        SceneManager.LoadScene("Intoduction");
-	    }
-
-	    if (Input.GetKey(KeyCode.Q))
-	    {
-	        SceneManager.LoadScene("Intoduction");
-	    }
-    }
+	}
 }

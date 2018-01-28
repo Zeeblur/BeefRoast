@@ -15,32 +15,9 @@
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKey(KeyCode.Return))
+            if (Input.GetKey(KeyCode.Joystick1Button0))
             {
                 SceneManager.LoadScene("level_01_Laser");
             }
-            if (Input.GetKey(KeyCode.Space))
-            {
-                SceneManager.LoadScene("level_01_Laser");
-            }
-            if (Input.GetKey(KeyCode.E))
-            {
-                SceneManager.LoadScene("level_01_Laser");
-            }
-
-            if (Input.GetKey(KeyCode.W))
-            {
-                SceneManager.LoadScene("level_01_Laser");
-            }
-
-            if (Input.GetKey(KeyCode.E))
-            {
-                SceneManager.LoadScene("level_01_Laser");
-        }
-
-            if (Input.GetKey(KeyCode.Q))
-            {
-                SceneManager.LoadScene("level_01_Laser");
-        }
     }
-        }
+}

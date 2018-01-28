@@ -27,13 +27,22 @@ public class PlayerBehaviour : MonoBehaviour
 	bool canPoosh = false;
 	public List<GameObject> pooshables = new List<GameObject>();
 	GameObject closestPooshable;
-	bool pooshing = false;
+
 
     private bool canRotate;
     public List<GameObject> rotatables = new List<GameObject>();
     GameObject closestRotatable;
-    bool rotating;
-    
+    public bool rotating;
+
+    public Material clothes;
+    public Material invise;
+
+	public bool pooshing = false;
+
+	GameObject closestPushable;
+
+	public bool ismoving = false;
+
 
     // Use this for initialization
     void Start()
@@ -43,7 +52,24 @@ public class PlayerBehaviour : MonoBehaviour
 
     }
 
-	void Update(){
+    public void changeColour(Color c)
+    {
+        // clothes
+        invise.color = c;
+        GameObject.FindGameObjectWithTag("clothes").GetComponent<MeshRenderer>().material = invise;
+    }
+
+    void Update(){
+
+
+
+		if (Input.GetAxisRaw ("Horizontal") != 0 || Input.GetAxisRaw ("Vertical") != 0) {
+			ismoving = true;
+		} else {
+			ismoving = false;
+		}
+
+
 
 		if (Input.GetKeyDown("t") && pooshables.Count!=0 && !pooshing) {
 
@@ -75,6 +101,7 @@ public class PlayerBehaviour : MonoBehaviour
 			pooshing = false;
 			
 		}
+
 
         // Rotatables
 	    if (Input.GetKeyDown("r") && rotatables.Count != 0 && !rotating)
@@ -115,13 +142,20 @@ public class PlayerBehaviour : MonoBehaviour
 	    }
     }
 
+
 	void ReleasePush(){
 
 		// change the block parent to the main heirarchy
 		gameObject.transform.GetChild(gameObject.transform.childCount-1).transform.parent = null;
 		changeDirecAcross = true;
 		changeDirecUp = true;
+
 	    rBod.constraints = RigidbodyConstraints.None;
+
+
+		FMODUnity.RuntimeManager.PlayOneShot ("event:/player connect to stone", GetComponent<Transform> ().position);
+
+
 	}
 
     void ReleaseRotate()
@@ -219,9 +253,13 @@ public class PlayerBehaviour : MonoBehaviour
 
 	    changeDirecAcross = false;
 
+
         // change brick parent to player
 	    chosenBlock = sideToLockOnTo.parent.transform;
 	    chosenBlock.parent = gameObject.transform;
+
+		FMODUnity.RuntimeManager.PlayOneShot ("event:/player connect to stone", GetComponent<Transform> ().position);
+
 
 	}
 
@@ -296,6 +334,9 @@ public class PlayerBehaviour : MonoBehaviour
         }
 
 
+		anim.SetBool("pushing", pooshing);
+
+
         movement = (orient * dir);
         movement = movement.normalized;
         rBod.MovePosition(transform.position + (movement * Speed * Time.deltaTime));
@@ -323,9 +364,11 @@ public class PlayerBehaviour : MonoBehaviour
 
         anim.SetBool("walking", walking);
 
-        anim.SetBool("pushing", pushable);
+        anim.SetBool("pushing", pooshing);
+
 
     }
+
 
     void OnTriggerEnter(Collider col){
 

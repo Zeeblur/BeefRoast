@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Collections;
 
 public enum colours
 {
@@ -98,6 +99,9 @@ public class Laser : MonoBehaviour
 
         if (bHit)
         {
+
+          //  Debug.Log("I am hitting: " + hit.transform.name);
+
             length = hit.distance;
 
             if (transform.parent != null)
@@ -146,6 +150,22 @@ public class Laser : MonoBehaviour
                     spawner.localPosition.y,
                     -spawner.localPosition.z - 0.1f);
             }
+            else if (target.gameObject.tag == "Player" && target.gameObject.GetComponent<PlayerBehaviour>().rotating)
+            {
+                mirror(hit, true);
+            }
+            else if (target.gameObject.tag == "Player")
+            {
+                // change colour
+                if (!isChanging)
+                {
+                    StartCoroutine(MyCoroutine(target));
+                }
+            }
+            else if (target.gameObject.tag == "Mirror")
+            {
+                mirror(hit, false);
+            }
             else
             {
                 foreach(GameObject obj in objSpawned)
@@ -156,5 +176,53 @@ public class Laser : MonoBehaviour
             }
         }
 
+    }
+
+    bool isChanging = false;
+
+    IEnumerator MyCoroutine(Transform col)
+    {
+        isChanging = true;
+        yield return new WaitForSeconds(2);
+        Debug.Log("change colour to " + color);
+        col.gameObject.GetComponent<PlayerBehaviour>().changeColour(shade[(int)color]);
+
+    }
+
+    void mirror(RaycastHit hit, bool play)
+    {
+        Debug.Log("HIT MIRROR");
+        Transform theMirror = hit.transform.GetChild(0);
+
+        for (int i = 0; i < hit.transform.childCount; i++)
+        {
+            if (hit.transform.GetChild(i).tag == "Mirror")
+            {
+                theMirror = hit.transform.GetChild(i).GetChild(0);
+                break;
+            }
+        }
+
+        Transform spawner = theMirror.GetChild(0);
+
+        Debug.Log("spawner is " + spawner.name);
+
+        if (spawner.childCount < 1)
+        {
+           // Debug.Log("HIT MIRROR");
+
+            GameObject colouredBeam = Instantiate(emitPrefab) as GameObject;
+            colouredBeam.GetComponent<Laser>().color = this.color;
+            colouredBeam.GetComponent<Laser>().emitPrefab = emitPrefab;
+            // false = worldposition doesn't stay
+            colouredBeam.transform.SetParent(spawner, false);
+
+            objSpawned.Add(colouredBeam);
+        }
+
+        spawner.position = pointLight.transform.position;
+
+        if (!play)
+        spawner.forward = hit.transform.GetChild(0).up;
     }
 }

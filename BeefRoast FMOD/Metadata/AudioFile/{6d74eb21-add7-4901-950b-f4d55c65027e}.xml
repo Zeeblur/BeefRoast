@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{6d74eb21-add7-4901-950b-f4d55c65027e}">
+        <property name="assetPath">
+            <value>birdcall 2.aif</value>
+        </property>
+        <property name="isStreaming">
+            <value>true</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>26.866666666666667</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{c409303a-f008-42f3-a356-8ab3bc374d86}</destination>
+        </relationship>
+    </object>
+</objects>
