@@ -9,11 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 2a886e969f9a28e44a42e67568646458
   - enabled: 1
-    path: Assets/Scenes/level_01_Laser.unity
-    guid: 931e6d1b4e1bf0f479841e8caa012649
-  - enabled: 0
-    path: Assets/Scenes/CharTest.unity
-    guid: 857d5929fc76df141ab21d521059dedb
-  - enabled: 1
     path: Assets/Scenes/Introduction.unity
     guid: 509f345a7f24a524ea1b0a26fd39f8a6
+  - enabled: 1
+    path: Assets/Scenes/level_01_Laser.unity
+    guid: 931e6d1b4e1bf0f479841e8caa012649
+  - enabled: 1
+    path: Assets/Scenes/Level_02.unity
+    guid: 44d8693db9b1db740aa8115044fe1dee
+  - enabled: 1
+    path: Assets/Scenes/level_03.unity
+    guid: 29a1bc1fdf0052a4b9008160930e6d6d

@@ -14,7 +14,7 @@ public class MenuCont : MonoBehaviour {
 	void Update () {
 	    if (Input.GetKey(KeyCode.Joystick1Button0))
 	    {
-	        SceneManager.LoadScene("Intoduction");
-	    }
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
 	}
 }
