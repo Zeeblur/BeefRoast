@@ -56,7 +56,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         // clothes
         invise.color = c;
-        GameObject.FindGameObjectWithTag("clothes").GetComponent<MeshRenderer>().material = invise;
+        GameObject.FindGameObjectWithTag("clothes").GetComponent<SkinnedMeshRenderer>().material = invise;
     }
 
     void Update(){

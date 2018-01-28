@@ -180,6 +180,8 @@ public class Laser : MonoBehaviour
 
     bool isChanging = false;
 
+    public PlayerBehaviour script;
+
     IEnumerator MyCoroutine(Transform col)
     {
         isChanging = true;

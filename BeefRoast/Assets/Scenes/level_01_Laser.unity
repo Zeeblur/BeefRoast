@@ -825,6 +825,10 @@ Prefab:
       propertyPath: invise
       value: 
       objectReference: {fileID: 2100000, guid: 66b9135bcc8faf84ea1d4ab97c11afbf, type: 2}
+    - target: {fileID: 1910430867551396, guid: 3c5c99ac3f0fab44fbc31a1c8f2b3e2a, type: 2}
+      propertyPath: m_TagString
+      value: clothes
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3c5c99ac3f0fab44fbc31a1c8f2b3e2a, type: 2}
   m_IsPrefabParent: 0
