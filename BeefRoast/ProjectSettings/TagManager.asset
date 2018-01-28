@@ -7,6 +7,8 @@ TagManager:
   - LightEmit
   - Pushable
   - Side
+  - Rotatable
+  - RotatableSide
   layers:
   - Default
   - TransparentFX

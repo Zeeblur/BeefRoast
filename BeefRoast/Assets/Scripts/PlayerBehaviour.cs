@@ -5,33 +5,35 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
 
-    public float Speed = 6.0f;
+    public float Speed = 3.0f;
+
+    public float RotateSpeed = 0.000001f;
 
     Vector3 movement;
     public Animator anim;
     Rigidbody rBod;
+    Rigidbody parentrBod;
 
 	bool push = false;
-	bool canRotate = false;
     bool canPush = false;
     bool pushable = false;
     bool rotatable = false;
     bool changeDirecUp = true;
     bool changeDirecAcross = true;
-
-	public List<GameObject> pushables = new List<GameObject>();
+    private bool changeRotate = true;
+    string nsewDir;
 
 
 	bool canPoosh = false;
 	public List<GameObject> pooshables = new List<GameObject>();
 	GameObject closestPooshable;
-
-
 	bool pooshing = false;
 
-
-
-	GameObject closestPushable;
+    private bool canRotate;
+    public List<GameObject> rotatables = new List<GameObject>();
+    GameObject closestRotatable;
+    bool rotating;
+    
 
     // Use this for initialization
     void Start()
@@ -39,31 +41,13 @@ public class PlayerBehaviour : MonoBehaviour
 
         rBod = GetComponent<Rigidbody>();
 
-		// add all pushable objects to pushables list
-		foreach(GameObject g in GameObject.FindGameObjectsWithTag("Pushable")) {
-			pushables.Add (g);
-		}
-
     }
-
 
 	void Update(){
 
-//		closestPushable = pushables [0];
-//		// set shortest distance to the distance between the player and the first pushable
-//		float shortestDistance = Vector3.Distance (this.transform.position, pushables[0].transform.position);
-//		//check for the shortest distance
-//		foreach (GameObject g in pushables) {
-//
-//			if (Vector3.Distance(g.transform.position, this.transform.position) 
-//				< Vector3.Distance(closestPushable.transform.position, this.transform.position)){
-//				closestPushable = g;
-//				}
-//		}
-//		Debug.Log ("the closest block is " + Vector3.Distance(closestPushable.transform.position, this.transform.position) + " away");
-
 		if (Input.GetKeyDown("t") && pooshables.Count!=0 && !pooshing) {
 
+            Debug.Log(pooshables.Count+": is pooshable count");
 			if (pooshables.Count == 1) {
 				// lock to pooshable 1
 				LockToPush (pooshables[0].transform);
@@ -85,14 +69,51 @@ public class PlayerBehaviour : MonoBehaviour
 
 			pooshing = true;
 
-
 		} else if (Input.GetKeyDown ("t") && pooshing) {
 			// release push
 			ReleasePush();
 			pooshing = false;
 			
 		}
-	}
+
+        // Rotatables
+	    if (Input.GetKeyDown("r") && rotatables.Count != 0 && !rotating)
+	    {
+
+	        if (rotatables.Count == 1)
+	        {
+	            // lock to pooshable 1
+	            LockToRotate(rotatables[0].transform);
+	        }
+	        else
+	        {
+	            // find the closest pushable parent block
+
+	            closestRotatable = rotatables[0];
+	            foreach (var p in rotatables)
+	            {
+	                if (Vector3.Distance(transform.position, p.transform.position)
+	                    < Vector3.Distance(transform.position, closestRotatable.transform.position))
+	                {
+	                    closestRotatable = p;
+	                }
+	            }
+	            // lock to closest pushable
+	            LockToRotate(closestRotatable.transform);
+
+	        }
+
+	        rotating = true;
+
+	    }
+	    else if (Input.GetKeyDown("r") && rotating)
+	    {
+	        // release push
+	        ReleaseRotate();
+	        rotating = false;
+
+	    }
+    }
 
 	void ReleasePush(){
 
@@ -100,9 +121,17 @@ public class PlayerBehaviour : MonoBehaviour
 		gameObject.transform.GetChild(gameObject.transform.childCount-1).transform.parent = null;
 		changeDirecAcross = true;
 		changeDirecUp = true;
+	    rBod.constraints = RigidbodyConstraints.None;
 	}
 
-
+    void ReleaseRotate()
+    {
+        Debug.Log("Release Rotate Class");
+        // change the block parent to the main heirarchy
+        gameObject.transform.GetChild(gameObject.transform.childCount - 1).transform.parent = null;
+        changeRotate = true;
+        rBod.constraints = RigidbodyConstraints.None;
+    }
 
     void FixedUpdate()
     {
@@ -111,79 +140,54 @@ public class PlayerBehaviour : MonoBehaviour
         // get input from axes
         // Raw input has fixed values -1, 0 or 1
 
-        // Checking for push
-        if (canPush && Input.GetKey("space"))
-        {
-
-            pushable = true;
-
-            Debug.Log("push");
-            
-            // Getting vector direction
-            Vector3 forward = transform.forward;
-            forward.y = 0;
-
-            float headingAngle = Quaternion.LookRotation(forward).eulerAngles.y;
-
-            // Checking if facing north/south or east/west
-            if ((headingAngle > 45f && headingAngle < 315f) || (headingAngle > 135f &&  headingAngle < 225f ))
-            {
-                Debug.Log("North/South");
-                changeDirecAcross = false;
-            }
-            else
-            {
-                Debug.Log("East/West");
-                changeDirecUp = false;
-            }
-
-            var push = new Push();
-            push.MoveBlock(movement);
-            
-        } // Checking for rotate
-        else if (canRotate && Input.GetKey("space"))
-        {
-            rotatable = true;
-
-            Debug.Log("Rotate");
-
-        }
-        else
-        {
-            rotatable = false;
-            pushable = false;
-            changeDirecUp = true;
-            changeDirecAcross = true;
-        }
-
         float horz = Input.GetAxisRaw("Horizontal");
         float vert = Input.GetAxisRaw("Vertical");
 
-        // Stopping char from moving sideways with block
-        if (changeDirecUp == false)
+        // Getting vector direction
+        Vector3 forward = transform.forward;
+        forward.y = 0;
+        float headingAngle = Quaternion.LookRotation(forward).eulerAngles.y;
+
+        /*
+        // Checking if facing north/south or east/west
+        if ((headingAngle >= 45f && headingAngle <= 315f && changeDirecAcross == false) || (headingAngle >= 135f && headingAngle <= 225f && changeDirecAcross == false))
         {
+            Debug.Log("North/South");
+            Move(0, vert);
+        }
+        else if ((headingAngle >= 225f && headingAngle <= 315f && changeDirecUp == false) || (headingAngle >= 45f && headingAngle <= 135f && changeDirecUp == false))
+        {
+            Debug.Log("East/West");
             Move(horz, 0);
         }
-		else if (changeDirecAcross == false)
+        */
+
+        // Stopping char from moving sideways with block
+        if (changeDirecAcross == false)
         {
-            Move(0, vert);
+            Debug.Log("vert");
+            Move(vert, false);
+            //rBod.constraints = RigidbodyConstraints.FreezeAll;
+        }else if (changeRotate == false)
+        {
+            //locked on
+            MoveRotate(horz);
+            // rBod.constraints = RigidbodyConstraints.FreezeAll;
         }
         else
         {
             Move(horz, vert);
+            animating(horz, vert);
         }
-        
-        animating(horz, vert);
+
+      
+
+ 
 
     }
 
-
-
-
+    // Changes rotation of player to match block
 	void LockToPush(Transform sideToLockOnTo){
-
-//		Debug.Log (sideToLockOnTo.gameObject.name);
-
 		Vector3 temp = transform.position;
 		temp.z = sideToLockOnTo.transform.position.z;
 		temp.x = sideToLockOnTo.transform.position.x;
@@ -191,21 +195,62 @@ public class PlayerBehaviour : MonoBehaviour
 		transform.position = temp;
 		transform.rotation = sideToLockOnTo.transform.rotation;
 
+	    // Getting vector direction
+	    Vector3 forward = transform.forward;
+	    forward.y = 0;
 
-		changeDirecAcross = false;
-		changeDirecUp = false;
+        /*
+        // THROWING OUT REALLY STRANGE ANGLES (90.0003Degrees etc)
+	    float headingAngle = Quaternion.LookRotation(forward).eulerAngles.y;
+        Debug.Log(headingAngle + ": heading angle");
 
-		// change brick parent to player
-		sideToLockOnTo.parent.transform.parent = this.gameObject.transform;
+	    // Checking if facing north/south/east/west
+	    if (headingAngle <= 45f && headingAngle >= 315f || headingAngle >= 135f && headingAngle <= 225f)
+	    {
+	        changeDirecAcross = false;
+            Debug.Log("N/S");
+        }
+	    else
+	    {
+	        changeDirecUp = false;
+            Debug.Log("E/W");
+        }
+        */
 
+	    changeDirecAcross = false;
+
+        // change brick parent to player
+	    chosenBlock = sideToLockOnTo.parent.transform;
+	    chosenBlock.parent = gameObject.transform;
 
 	}
 
+    private Transform chosenBlock;
+
+    // Changes rotation of player to match block
+    void LockToRotate(Transform sideToLockOnTo)
+    {
+        Debug.Log("LOCKINGTOROTATE");
+
+        Vector3 temp = transform.position;
+        temp.z = sideToLockOnTo.transform.position.z;
+        temp.x = sideToLockOnTo.transform.position.x;
+
+        transform.position = temp;
+        transform.rotation = sideToLockOnTo.transform.rotation;
+
+        changeRotate = false;
+
+        // change brick parent to player
+        chosenBlock = sideToLockOnTo.parent.transform;
+        chosenBlock.SetParent(gameObject.transform, true);
+
+        //rBod.constraints = RigidbodyConstraints.FreezeRotation;
+    }
+
 
     void Move(float h, float v)
-    {
-
-
+    { 
         Vector3 orient = GameObject.FindGameObjectWithTag("MainCamera").transform.forward;
 //        Debug.Log("pr " + orient);
 
@@ -213,7 +258,16 @@ public class PlayerBehaviour : MonoBehaviour
 
         movement = movement.normalized;
 
-        rBod.MovePosition(transform.position + (movement * Speed * Time.deltaTime));
+        if (changeRotate == false)
+        {
+            Debug.Log("SPEED REDUCED");
+            rBod.MovePosition(transform.position + (movement * RotateSpeed * Time.deltaTime));
+        }
+        else
+        {
+            rBod.MovePosition(transform.position + (movement * Speed * Time.deltaTime));
+        }
+        
 
         if (h != 0 || v != 0)
         {
@@ -221,7 +275,43 @@ public class PlayerBehaviour : MonoBehaviour
             rotation.SetLookRotation(movement, Vector3.up);
             Quaternion newRotation = Quaternion.Slerp(this.transform.rotation, rotation, 0.2f);
             rBod.MoveRotation(newRotation);
+        }
 
+        rBod.rotation = new Quaternion(0, rBod.rotation.y, 0, rBod.rotation.w);
+    }
+
+    void Move(float dir, bool horizon)
+    {
+        Debug.Log("horiztom " + horizon);
+        Vector3 orient;
+        if (horizon)
+        {
+            orient = transform.right;
+
+            
+        }
+        else
+        {
+            orient = transform.forward;
+        }
+
+
+        movement = (orient * dir);
+        movement = movement.normalized;
+        rBod.MovePosition(transform.position + (movement * Speed * Time.deltaTime));
+
+    }
+
+    void MoveRotate(float h)
+    {
+       
+        if (h != 0 )
+        {
+            Quaternion rotation = Quaternion.identity;
+           // rotation.Rot(movement, Vector3.up);
+            transform.RotateAround(chosenBlock.transform.position, Vector3.up, -h);
+            Quaternion newRotation = Quaternion.Slerp(this.transform.rotation, rotation, 0.2f);
+            rBod.MoveRotation(newRotation);
         }
 
         rBod.rotation = new Quaternion(0, rBod.rotation.y, 0, rBod.rotation.w);
@@ -235,8 +325,48 @@ public class PlayerBehaviour : MonoBehaviour
 
         anim.SetBool("pushing", pushable);
 
+//        anim.SetBool("Pulling"); -- Need a pulling animation set
 //        Debug.Log(pushable);
 
+    }
+
+    void OnTriggerEnter(Collider col){
+
+		
+		if (col.gameObject.tag == "Side")
+		{
+		    Debug.Log("Pooshable");
+		    canPoosh = true;
+		    pooshables.Add(col.gameObject);
+        }
+
+        if (col.gameObject.tag == "RotatableSide")
+        {
+            Debug.Log("Rotatable");
+            canRotate = true;
+            rotatables.Add(col.gameObject);
+        }
+    }
+
+	void OnTriggerExit(Collider col){
+
+		if (col.gameObject.tag == "Side")
+		{
+			Debug.Log ("SideCode");
+			canPoosh = true;
+
+			pooshables.Remove(col.gameObject);
+
+		}
+
+	    if (col.gameObject.tag == "RotatableSide")
+	    {
+	        Debug.Log("SideCode");
+	        canRotate = true;
+
+	        rotatables.Remove(col.gameObject);
+
+	    }
     }
 
     void OnCollisionEnter(Collision col)
@@ -246,51 +376,19 @@ public class PlayerBehaviour : MonoBehaviour
         if (col.gameObject.tag == "Pushable")
         {
             canPush = true;
-//            Debug.Log("Can push true");
+            //            Debug.Log("Can push true");
         }
 
         if (col.gameObject.tag == "Rotatable")
         {
             canRotate = true;
-//            Debug.Log("Can rotate true");
+            //            Debug.Log("Can rotate true");
         }
 
     }
 
-
-	void OnTriggerEnter(Collider col){
-
-//		if (col.GetType () != typeof(MeshCollider)) {
-//			return;
-//		}
-
-		Debug.Log ("BAWS");
-		if (col.gameObject.tag == "Side")
-		{
-			canPoosh = true;
-
-			pooshables.Add (col.gameObject);
-		}
-	}
-
-	void OnTriggerExit(Collider col){
-
-		if (col.gameObject.tag == "Side")
-		{
-			Debug.Log ("BOOS");
-			canPoosh = true;
-
-			pooshables.Remove(col.gameObject);
-
-		}
-	}
-
-
-
     void OnCollisionExit(Collision col)
     {
-        Debug.Log("Collision stopped");
-
         if (col.gameObject.tag == "Pushable")
         {
             canPush = false;
@@ -315,4 +413,12 @@ public class PlayerBehaviour : MonoBehaviour
     // Joining rotate block and charcter
     // Rotating around the centre of a block
 
+    // Throwing random angles
+    // Turning 180 with block
+    // Block changing direction when walk into a wall
+
+    // Release push
+    // Lock to push
+
+    //             rBod.constraints = RigidbodyConstraints.FreezeAll; for rotation before blocks are joined
 }
