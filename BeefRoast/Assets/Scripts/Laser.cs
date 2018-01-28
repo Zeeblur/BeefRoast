@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -26,6 +26,8 @@ public class Laser : MonoBehaviour
 
     public Material[] colouredMat;
 
+    List<GameObject> objSpawned = new List<GameObject>();
+
     private Color[] shade =
     {
         Color.white,
@@ -40,6 +42,7 @@ public class Laser : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+
         laserScale = new Vector3(thickness, thickness, length);
 
         // holder is light emit
@@ -80,6 +83,8 @@ public class Laser : MonoBehaviour
 	void Update ()
     {
         ChangeColour(color);
+
+
         // change size per raycast
         laserScale = new Vector3(thickness, thickness, 10 * length);
         laser.transform.localScale = laserScale;
@@ -95,6 +100,11 @@ public class Laser : MonoBehaviour
         {
             length = hit.distance;
 
+            if (transform.parent != null)
+            {
+                length *= 0.5f;
+            }
+
             Transform target = hit.transform;
 
             // if hit a filter, check if filter has an emitter already.
@@ -102,8 +112,6 @@ public class Laser : MonoBehaviour
             {
                 
                 Transform spawner = hit.transform.GetChild(0);
-
-                Debug.Log("name: " + spawner.name);
 
                 if (spawner.childCount < 1)
                 {
@@ -126,7 +134,10 @@ public class Laser : MonoBehaviour
                     GameObject colouredBeam = Instantiate(emitPrefab) as GameObject;
                     colouredBeam.GetComponent<Laser>().color = (colours)chosenColour;
                     colouredBeam.GetComponent<Laser>().emitPrefab = emitPrefab;
+                    // false = worldposition doesn't stay
                     colouredBeam.transform.SetParent(spawner, false);
+
+                    objSpawned.Add(colouredBeam);
                 }
 
                 spawner.position = pointLight.transform.position;
@@ -134,6 +145,14 @@ public class Laser : MonoBehaviour
                 spawner.localPosition = new Vector3(spawner.localPosition.x,
                     spawner.localPosition.y,
                     -spawner.localPosition.z - 0.1f);
+            }
+            else
+            {
+                foreach(GameObject obj in objSpawned)
+                {
+                    DestroyImmediate(obj);
+                }
+                objSpawned.Clear();
             }
         }
 
