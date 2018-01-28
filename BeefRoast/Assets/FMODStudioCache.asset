@@ -18,10 +18,63 @@ MonoBehaviour:
   - {fileID: 114341803073302610}
   - {fileID: 114144687132015394}
   - {fileID: 114881152379689104}
+  - {fileID: 114693852086299992}
+  - {fileID: 114251536704436472}
+  - {fileID: 114950946217481724}
+  - {fileID: 114234123059460058}
+  - {fileID: 114043064232621262}
+  - {fileID: 114991282970013620}
+  - {fileID: 114517355284573988}
+  - {fileID: 114560901618606094}
+  - {fileID: 114108948562935882}
   MasterBankRef: {fileID: 114989860241335606}
   StringsBankRef: {fileID: 114646157616943358}
-  stringsBankWriteTime: 636526765070000000
+  stringsBankWriteTime: 636527454260000000
   cacheVersion: 2
+--- !u!114 &114043064232621262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/player enters light
+  guid: 993b44927110014cba19355d6385884a
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8000
+--- !u!114 &114108948562935882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/player connect to stone
+  guid: 6ba88880bf6e7b4f8856ec939594973c
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8000
 --- !u!114 &114144687132015394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44,6 +97,50 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 500
   Length: 500
+--- !u!114 &114234123059460058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/stone enters light
+  guid: 7a00273fbca1644e8111ce2686141187
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 12000
+--- !u!114 &114251536704436472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/wind
+  guid: ebc214a705cf494ca590a782a7334fd6
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 22000
 --- !u!114 &114324636458550674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +185,50 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 10000
+--- !u!114 &114517355284573988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/birds
+  guid: 14fa291418280645a223d01356676341
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 26866
+--- !u!114 &114560901618606094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/music
+  guid: 423a9b24f5c94c4cb094fda6b916e6c0
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 72000
 --- !u!114 &114646157616943358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,12 +242,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: /Users/Finbar/Documents/Game Jam Docs/BeefRoast/BeefRoast FMOD/Build/Desktop/Master
     Bank.strings.bank
-  lastModified: 636526765070000000
+  lastModified: 636527454260000000
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 824
+    Value: 1374
   Exists: 1
+--- !u!114 &114693852086299992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: snapshot:/Room
+  guid: c709175b1a3ac947b70690e741bf2f37
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
 --- !u!114 &114695147712025414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,6 +374,28 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 8000
+--- !u!114 &114950946217481724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/just light
+  guid: 5bd9eb0351e8564684c628eeafdf2642
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8000
 --- !u!114 &114989860241335606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,9 +409,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: /Users/Finbar/Documents/Game Jam Docs/BeefRoast/BeefRoast FMOD/Build/Desktop/Master
     Bank.bank
-  lastModified: 636526765070000000
+  lastModified: 636527454260000000
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 365728
+    Value: 2138304
   Exists: 1
+--- !u!114 &114991282970013620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: event:/stone impacts
+  guid: 7d59daa565ebc64db86c00db5f9b43a6
+  Banks:
+  - {fileID: 114989860241335606}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8000

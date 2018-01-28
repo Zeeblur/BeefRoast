@@ -26,12 +26,12 @@ public class PlayerBehaviour : MonoBehaviour
 	public List<GameObject> pooshables = new List<GameObject>();
 	GameObject closestPooshable;
 
-
-	bool pooshing = false;
-
-
+	public bool pooshing = false;
 
 	GameObject closestPushable;
+
+	public bool ismoving = false;
+
 
     // Use this for initialization
     void Start()
@@ -61,6 +61,16 @@ public class PlayerBehaviour : MonoBehaviour
 //				}
 //		}
 //		Debug.Log ("the closest block is " + Vector3.Distance(closestPushable.transform.position, this.transform.position) + " away");
+
+
+
+		if (Input.GetAxisRaw ("Horizontal") != 0 || Input.GetAxisRaw ("Vertical") != 0) {
+			ismoving = true;
+		} else {
+			ismoving = false;
+		}
+
+
 
 		if (Input.GetKeyDown("t") && pooshables.Count!=0 && !pooshing) {
 
@@ -92,6 +102,8 @@ public class PlayerBehaviour : MonoBehaviour
 			pooshing = false;
 			
 		}
+
+
 	}
 
 	void ReleasePush(){
@@ -100,6 +112,9 @@ public class PlayerBehaviour : MonoBehaviour
 		gameObject.transform.GetChild(gameObject.transform.childCount-1).transform.parent = null;
 		changeDirecAcross = true;
 		changeDirecUp = true;
+
+		FMODUnity.RuntimeManager.PlayOneShot ("event:/player connect to stone", GetComponent<Transform> ().position);
+
 	}
 
 
@@ -198,6 +213,9 @@ public class PlayerBehaviour : MonoBehaviour
 		// change brick parent to player
 		sideToLockOnTo.parent.transform.parent = this.gameObject.transform;
 
+		FMODUnity.RuntimeManager.PlayOneShot ("event:/player connect to stone", GetComponent<Transform> ().position);
+
+
 
 	}
 
@@ -207,7 +225,7 @@ public class PlayerBehaviour : MonoBehaviour
 
 
         Vector3 orient = GameObject.FindGameObjectWithTag("MainCamera").transform.forward;
-//        Debug.Log("pr " + orient);
+//      Debug.Log("pr " + orient);
 
         movement = (orient * v) + (GameObject.FindGameObjectWithTag("MainCamera").transform.right * h) ;
 
@@ -221,7 +239,6 @@ public class PlayerBehaviour : MonoBehaviour
             rotation.SetLookRotation(movement, Vector3.up);
             Quaternion newRotation = Quaternion.Slerp(this.transform.rotation, rotation, 0.2f);
             rBod.MoveRotation(newRotation);
-
         }
 
         rBod.rotation = new Quaternion(0, rBod.rotation.y, 0, rBod.rotation.w);
@@ -233,7 +250,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         anim.SetBool("walking", walking);
 
-        anim.SetBool("pushing", pushable);
+		anim.SetBool("pushing", pooshing);
 
 //        Debug.Log(pushable);
 
@@ -260,9 +277,6 @@ public class PlayerBehaviour : MonoBehaviour
 
 	void OnTriggerEnter(Collider col){
 
-//		if (col.GetType () != typeof(MeshCollider)) {
-//			return;
-//		}
 
 		Debug.Log ("BAWS");
 		if (col.gameObject.tag == "Side")

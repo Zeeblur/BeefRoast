@@ -8,7 +8,7 @@
             <value>true</value>
         </property>
         <property name="name">
-            <value>Reverb</value>
+            <value>Room Verb</value>
         </property>
         <relationship name="effectChain">
             <destination>{7068fc51-b8b7-4915-90a2-d4dafead36ba}</destination>
@@ -28,6 +28,12 @@
     </object>
     <object class="MixerBusPanner" id="{61ab7e5d-696a-4a3a-a584-fcfef0e9a4b0}"/>
     <object class="SFXReverbEffect" id="{aaffe31a-5ffb-453d-8167-4d15b6b98a27}">
+        <property name="decayTime">
+            <value>4000</value>
+        </property>
+        <property name="HFDecayRatio">
+            <value>48.5</value>
+        </property>
         <property name="wetLevel">
             <value>0</value>
         </property>
