@@ -1108,8 +1108,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1090100863}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -3}
+  m_LocalScale: {x: 1, y: 1, z: 5}
   m_Children: []
   m_Father: {fileID: 1445306664}
   m_RootOrder: 1
@@ -1448,9 +1448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 4
+  RotateSpeed: 0.000001
   anim: {fileID: 97476188}
-  changeDirecUp: 1
-  changeDirecAcross: 1
   pooshables: []
   rotatables: []
 --- !u!4 &1093979450
@@ -1814,7 +1813,7 @@ Transform:
   m_GameObject: {fileID: 1445306660}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.4, y: 1.06, z: 6.58}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 2, y: 2, z: 0.4}
   m_Children:
   - {fileID: 1001270214}
   - {fileID: 1090100864}
@@ -1848,8 +1847,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1454614556}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 5}
   m_Children: []
   m_Father: {fileID: 1445306664}
   m_RootOrder: 2
@@ -2053,8 +2052,8 @@ GameObject:
   - component: {fileID: 1960127374}
   - component: {fileID: 1960127373}
   m_Layer: 0
-  m_Name: Glass Block
-  m_TagString: Rotatable
+  m_Name: Pushable Glass Block
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
