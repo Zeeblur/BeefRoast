@@ -21,5 +21,15 @@ public class MenuCont : MonoBehaviour {
 	    {
 	        SceneManager.LoadScene("Intoduction");
 	    }
+
+	    if (Input.GetKey(KeyCode.E))
+	    {
+	        SceneManager.LoadScene("Intoduction");
+	    }
+
+	    if (Input.GetKey(KeyCode.W))
+	    {
+	        SceneManager.LoadScene("Intoduction");
+	    }
     }
 }

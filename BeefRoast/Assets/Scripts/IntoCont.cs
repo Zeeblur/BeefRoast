@@ -23,5 +23,14 @@
             {
                 SceneManager.LoadScene("level_01");
             }
+            if (Input.GetKey(KeyCode.E))
+            {
+                SceneManager.LoadScene("level_01");
+            }
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                SceneManager.LoadScene("level_01");
+            }
     }
         }
